@@ -1,72 +1,69 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <iomanip> 
 
 using namespace std;
 
-struct NhanVien {
-    string ten;
-    int tuoi;
+class NhanVien {
+private:
+    string maNV;
+    string hoTen;
+    double luong;
 
-    void nhap() {
-        cout << "Nhap ten: ";
-        cin >> ten;
-        cout << "Nhap tuoi: ";
-        cin >> tuoi;
+public:
+    NhanVien() {
+        maNV = "";
+        hoTen = "";
+        luong = 0.0;
+    }
+    NhanVien(string ma, string ten, double l) {
+        maNV = ma;
+        hoTen = ten;
+        luong = l;
     }
 
-    void xuat() const {
-        cout << "Ten: " << ten << " | Tuoi: " << tuoi << endl;
+    static void inTieuDe() {
+        cout << left 
+             << setw(15) << "Ma NV" 
+             << setw(25) << "Ho Ten" 
+             << setw(15) << "Luong" << endl;
+        cout << string(55, '-') << endl;
+    }
+    void xuatTheoCot() const {
+        cout << left 
+             << setw(15) << maNV 
+             << setw(25) << hoTen 
+             << fixed << setprecision(2) << setw(15) << luong << endl;
     }
 };
 
 int main() {
-    int n = 3; // Dem demo voi 3 nhan vien (co the doi thanh 10)
+    int n;
+    cout << "Nhap so luong nhan vien: ";
+    cin >> n;
 
-    // CACH 1: Dung mang tinh (Static Array)
-    cout << "--- CACH 1: MANG TINH ---\n";
-    NhanVien dsnv1[3];
-
-    for (int i = 0; i < n; i++) {
-        cout << "=== NHAP THONG TIN NHAN VIEN " << i + 1 << " ===\n";
-        dsnv1[i].nhap();
-    }
-
-    cout << "\n=== XUAT THONG TIN MANG TINH ===\n";
-    for (int i = 0; i < n; i++) {
-        dsnv1[i].xuat();
-    }
-
-    // CACH 2: Dung con tro & Cap phat dong (Dynamic Array)
-    cout << "\n--- CACH 2: CAP PHAT DONG (NEW / DELETE) ---\n";
-    NhanVien *dsnv2 = new NhanVien[n]; // Cap phat vung nho Heap
+    vector<NhanVien> dsNV; 
 
     for (int i = 0; i < n; i++) {
-        cout << "=== NHAP THONG TIN NHAN VIEN " << i + 1 << " ===\n";
-        dsnv2[i].nhap();
+        string ma, ten;
+        double luong;
+
+        cout << "\n=== NHAP THONG TIN NHAN VIEN THU " << i + 1 << " ===" << endl;
+        cout << "Nhap ma NV: ";
+        cin >> ma;
+        cin.ignore(); 
+        cout << "Nhap ho ten: ";
+        getline(cin, ten);
+        cout << "Nhap luong: ";
+        cin >> luong;
+        NhanVien nv(ma, ten, luong);
+        dsNV.push_back(nv);
     }
-
-    cout << "\n=== XUAT THONG TIN MANG DONG ===\n";
-    for (int i = 0; i < n; i++) {
-        dsnv2[i].xuat();
-    }
-
-    delete[] dsnv2;
-
-    // CACH 3: Dung std::vector (Con container STL)
-    cout << "\n--- CACH 3: DUNG STD::VECTOR ---\n";
-    vector<NhanVien> dsnv3;
-
-    for (int i = 0; i < n; i++) {
-        cout << "=== NHAP THONG TIN NHAN VIEN " << i + 1 << " ===\n";
-        NhanVien nv;
-        nv.nhap();
-        dsnv3.push_back(nv); // Them vao cuoi vector
-    }
-
-    cout << "\n=== XUAT THONG TIN VECTOR ===\n";
-    for (size_t i = 0; i < dsnv3.size(); i++) {
-        dsnv3[i].xuat();
+    cout << "\n================ BANGLUONG NHAN VIEN ================\n";
+    NhanVien::inTieuDe();
+    for (size_t i = 0; i < dsNV.size(); i++) {
+        dsNV[i].xuatTheoCot();
     }
 
     return 0;
