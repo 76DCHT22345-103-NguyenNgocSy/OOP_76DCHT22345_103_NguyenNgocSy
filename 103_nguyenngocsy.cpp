@@ -1,83 +1,91 @@
 #include <iostream>
-#include <string>
-#include <vector>
-#include <iomanip> // Ð? dùng setw can ch?nh c?t
-
 using namespace std;
 
-class NhanVien {
+class MaTran {
 private:
-    string maNV;
-    string hoTen;
-    double luong;
+    int soHang;
+    int soCot;
+    int a[100][100];
 
 public:
-    // 1. Constructor không d?i (Default constructor)
-    NhanVien() {
-        maNV = "";
-        hoTen = "";
-        luong = 0.0;
+    // Constructor m?c d?nh
+    MaTran() {
+        soHang = 0;
+        soCot = 0;
     }
 
-    // 2. Constructor có d?i (Parameterized constructor)
-    NhanVien(string ma, string ten, double l) {
-        maNV = ma;
-        hoTen = ten;
-        luong = l;
+    // Constructor có tham s?
+    MaTran(int m, int n) {
+        soHang = m;
+        soCot = n;
     }
 
-    // Tiêu d? b?ng
-    static void inTieuDe() {
-        cout << left 
-             << setw(15) << "Ma NV" 
-             << setw(25) << "Ho Ten" 
-             << setw(15) << "Luong" << endl;
-        cout << string(55, '-') << endl;
+    // Nh?p ma tr?n
+    void nhap() {
+        for (int i = 0; i < soHang; i++) {
+            for (int j = 0; j < soCot; j++) {
+                cin >> a[i][j];
+            }
+        }
     }
 
-    // Xu?t d? li?u theo d?ng hàng (dùng cho d?nh d?ng c?t)
-    void xuatTheoCot() const {
-        cout << left 
-             << setw(15) << maNV 
-             << setw(25) << hoTen 
-             << fixed << setprecision(2) << setw(15) << luong << endl;
+    // Xu?t ma tr?n
+    void xuat() {
+        for (int i = 0; i < soHang; i++) {
+            for (int j = 0; j < soCot; j++) {
+                cout << a[i][j] << "\t";
+            }
+            cout << endl;
+        }
     }
+
+    // Khai báo hàm b?n
+    friend MaTran cong(MaTran A, MaTran B);
 };
 
+// Ð?nh nghia hàm b?n
+MaTran cong(MaTran A, MaTran B) {
+    MaTran C(A.soHang, A.soCot);
+
+    for (int i = 0; i < A.soHang; i++) {
+        for (int j = 0; j < A.soCot; j++) {
+            C.a[i][j] = A.a[i][j] + B.a[i][j];
+        }
+    }
+
+    return C;
+}
+
 int main() {
-    int n;
-    cout << "Nhap so luong nhan vien: ";
+    int m, n;
+
+    cout << "Nhap so hang: ";
+    cin >> m;
+
+    cout << "Nhap so cot: ";
     cin >> n;
 
-    vector<NhanVien> dsNV; // S? d?ng C?u trúc d? li?u Vector (Cách 3)
+    // Hai ma tr?n d?ng c?p
+    MaTran A(m, n);
+    MaTran B(m, n);
 
-    // ? MAIN: Nh?p n nhân viên s? d?ng constructor có d?i d? dua vào m?ng
-    for (int i = 0; i < n; i++) {
-        string ma, ten;
-        double luong;
+    cout << "Nhap ma tran A:\n";
+    A.nhap();
 
-        cout << "\n=== NHAP THONG TIN NHAN VIEN THU " << i + 1 << " ===" << endl;
-        cout << "Nhap ma NV: ";
-        cin >> ma;
-        cin.ignore(); // Xóa b? nh? d?m tru?c khi nh?p chu?i có kho?ng tr?ng
-        cout << "Nhap ho ten: ";
-        getline(cin, ten);
-        cout << "Nhap luong: ";
-        cin >> luong;
+    cout << "Nhap ma tran B:\n";
+    B.nhap();
 
-        // T?o d?i tu?ng b?ng Constructor có d?i và push_back vào vector
-        NhanVien nv(ma, ten, luong);
-        dsNV.push_back(nv);
-    }
+    // G?i hàm b?n d? c?ng
+    MaTran C = cong(A, B);
 
-    // Xu?t d? li?u nhân viên theo d?ng c?t
-    cout << "\n================ BANGLUONG NHAN VIEN ================\n";
-    NhanVien::inTieuDe();
-    for (size_t i = 0; i < dsNV.size(); i++) {
-        dsNV[i].xuatTheoCot();
-    }
+    cout << "\nMa tran A:\n";
+    A.xuat();
+
+    cout << "\nMa tran B:\n";
+    B.xuat();
+
+    cout << "\nMa tran A + B:\n";
+    C.xuat();
 
     return 0;
 }
-
-
